@@ -1,6 +1,8 @@
 import '../css/common.css';
 import { searchImages } from './image-library';
 import Notiflix from 'notiflix';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 const form = document.querySelector('form#search-form');
 import { gallery } from './gallery';
@@ -41,7 +43,8 @@ async function onSubmit(e) {
         loadMoreBtn.classList.remove('is-hidden');
         Notiflix.Notify.success(`Yaay! We found ${data.totalHits} images.`);
       }
-    }
+    lightbox.refresh(); 
+  }
   } catch (error) {
     Notiflix.Notify.failure(
       "We're sorry, but there was an error processing your request."
@@ -53,6 +56,7 @@ async function onSubmit(e) {
 async function onLoadMore() {
   try {
     page++;
+    
     const data = await searchImages(query, page);
     let hits = data.hits;
     renderImages(hits);
@@ -64,6 +68,7 @@ async function onLoadMore() {
     } else {
       loadMoreBtn.classList.remove('is-hidden');
     }
+    lightbox.refresh();
   } catch (error) {
     Notiflix.Notify.failure(
       "We're sorry, but there was an error processing your request."
@@ -72,5 +77,24 @@ async function onLoadMore() {
   }
 }
 
+const lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+});
+
+function renderImages(images) {
+  const html = images.map((image) => `
+    <a href="${image.largeImageURL}">
+      <img src="${image.webformatURL}" alt="${image.tags}" />
+    </a>
+  `).join('');
+  
+  gallery.innerHTML += html;
+  
+  lightbox.refresh();
+}
+
+
 form.addEventListener('submit', onSubmit);
 loadMoreBtn.addEventListener('click', onLoadMore);
+

@@ -3,9 +3,8 @@ import Notiflix from 'notiflix';
 
 const BASE_URL = 'https://pixabay.com/api/';
 const PER_PAGE = 40;
-let page = 1;
 
-async function searchImages(query) {
+async function searchImages(query, page) {
   const params = {
     key: '35867918-4e3839490958f79a97499fa36',
     q: query,
