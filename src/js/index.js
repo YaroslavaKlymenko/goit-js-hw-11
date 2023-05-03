@@ -1,8 +1,7 @@
 import '../css/common.css';
 import { searchImages } from './image-library';
 import Notiflix from 'notiflix';
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
+
 
 const form = document.querySelector('form#search-form');
 import { gallery } from './gallery';
@@ -75,23 +74,6 @@ async function onLoadMore() {
     );
     console.log(error);
   }
-}
-
-const lightbox = new SimpleLightbox('.gallery a', {
-  captionsData: 'alt',
-  captionDelay: 250,
-});
-
-function renderImages(images) {
-  const html = images.map((image) => `
-    <a href="${image.largeImageURL}">
-      <img src="${image.webformatURL}" alt="${image.tags}" />
-    </a>
-  `).join('');
-  
-  gallery.innerHTML += html;
-  
-  lightbox.refresh();
 }
 
 
